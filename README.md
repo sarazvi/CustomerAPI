@@ -34,7 +34,8 @@ Follow these instructions to run the project locally
 
 _git clone  https://github.com/sarazvi/CustomerAPI/_
 
-_cd customer-api_
+_cd CustomerAPI_
+
 
 **Build and Run the project**
 
