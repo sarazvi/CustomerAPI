@@ -1,0 +1,32 @@
+Q. Once completed answer the following question in the git repo (no code needed): If you were to scale your customer API service to millions of customers how would you build it differently?
+
+Scaling the Customer API for Millions of Users
+To handle millions of customers, significant architectural changes and optimizations would be necessary to ensure the service remains performant, reliable, and scalable. Here’s how I would approach scaling:
+1. Database Optimization
+Use a Distributed Database: Instead of using an in-memory database like H2, I would switch to a horizontally scalable distributed database such as Amazon RDS (MySQL/PostgreSQL), Google Cloud SQL, or Cassandra. These databases offer high availability and can distribute data across multiple servers, allowing for efficient handling of millions of records.
+Database Indexing: Proper indexing would be essential to optimize query performance, especially for frequently queried fields such as customer IDs, names, and emails.
+Partitioning: Data partitioning would ensure that the data is split across different database instances or tables based on certain criteria (e.g., geographical location or customer ID ranges), reducing the load on each instance.
+2. Microservices Architecture
+I would migrate from a monolithic architecture to microservices, where each service (e.g., Customer Service, Order Service, etc.) is independently deployed and scaled. This would allow us to scale specific services independently based on their load.
+API Gateway: An API gateway such as AWS API Gateway or Kong would be introduced to route requests efficiently and manage rate limiting, authentication, and authorization.
+3. Load Balancing and Horizontal Scaling
+Load Balancers: Implementing a load balancer like Nginx or AWS Elastic Load Balancing (ELB) would distribute incoming API requests across multiple instances of the application to ensure that no single server is overwhelmed.
+Horizontal Scaling: Use Kubernetes or Docker Swarm to orchestrate containerized instances of the application, enabling automatic scaling based on traffic. This would allow new instances of the API to be spun up during periods of high demand and terminated during off-peak times.
+4. Caching Mechanisms
+Implement a Cache Layer: Caching frequently accessed data (e.g., customer information) using services like Redis or Memcached would reduce the load on the database by storing results in memory and serving them from the cache for repeated requests.
+Content Delivery Network (CDN): If applicable, use a CDN to cache and serve static assets to reduce load on the core infrastructure.
+5. Asynchronous Processing
+For non-critical tasks (e.g., sending confirmation emails, logging), I would introduce message queues such as RabbitMQ or Amazon SQS to handle background tasks asynchronously. This would free up resources for core API functionalities.
+Event-Driven Architecture: Moving to an event-driven architecture where customer-related events (e.g., customer created, updated) are published to an event bus (e.g., Kafka), enabling other services to react asynchronously without overwhelming the system.
+6. API Rate Limiting and Throttling
+Implement rate limiting and request throttling using tools like RateLimiter or features within API Gateway to prevent abuse or overloading of the API by restricting the number of requests a client can make within a specific time period.
+7. Monitoring and Logging
+Centralized Logging: Use tools like ELK Stack (Elasticsearch, Logstash, Kibana) or AWS CloudWatch for centralized logging and monitoring. This would help to track performance bottlenecks, slow queries, and error rates in real time.
+Application Performance Monitoring (APM): Tools like New Relic or Datadog would help monitor response times, CPU usage, memory consumption, and other critical metrics, enabling proactive scaling decisions and failure recovery.
+8. Security Considerations
+Implement OAuth 2.0 or JWT for API authentication and authorization, especially as the scale increases.
+Use SSL/TLS to ensure that all data transferred between clients and servers is encrypted.
+Regularly audit and test the API for security vulnerabilities using tools like OWASP ZAP.
+9. Data Backup and Recovery
+Regular automated backups of customer data to ensure recovery in case of a system failure. This could be done using cloud-based backup solutions like AWS Backup or Google Cloud Storage.
+Disaster Recovery Plan: Setting up automated failover systems with replication across multiple availability zones (AZs) or regions to ensure high availability in case of infrastructure failure.
